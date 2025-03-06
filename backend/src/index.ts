@@ -4,7 +4,8 @@ import http from 'http';
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUI from "swagger-ui-express";
 
 dotenv.config();
 
@@ -30,6 +31,26 @@ const init = (): Promise<Express> => {
         res.header("Access-Control-Allow-Credentials", "true");
         next();
       });
+
+      // Swagger
+      const options = {
+        definition: {
+          openapi: "3.0.0",
+          info: {
+            title: "MyCloset backend",
+            version: "1.0.0",
+            description:
+              "MyCloset Backend",
+          },
+        },
+        apis: [`${__dirname}/apiDoc.yml`],
+      };
+      console.log(`Wanted swagger location - ${__dirname}/apiDoc.yml`)
+      const specs = swaggerJsDoc(options);
+      
+      // Routes
+      app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
+
 
       console.info(`Started listening on port ${port}`);
       resolve(app);
