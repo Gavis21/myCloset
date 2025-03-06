@@ -6,6 +6,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
+import authRoute from "./routes/auth.route";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ const init = (): Promise<Express> => {
       const specs = swaggerJsDoc(options);
       
       // Routes
+      app.use("/auth", authRoute);
       app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
 
 
