@@ -176,9 +176,66 @@ const refresh =  async (request: Request, response: Response) => {
 }
 
 
+const loginWithGoogle = () => {
+    return async (request: Request, response: Response) => {
+        try {
+            const oauth2Client = new OAuth2Client(
+                process.env.GOOGLE_CLIENT_ID,
+                process.env.GOOGLE_CLIENT_SECRET,
+                "postmessage"
+              );
+            const code = request.body.code;
+            const token = await oauth2Client.getToken(code);
+            const loginTicket = await oauth2Client.verifyIdToken({
+                idToken: token.tokens.id_token ?? "",
+            });
+
+            const payload = loginTicket.getPayload();
+            let user = await UserSchema.findOne({ email: payload?.email });
+
+            if(user === null){
+                user = await UserSchema.create({
+                    email: payload?.email,
+                    firstName: payload?.name?.split(" ")[0],
+                    lastName: payload?.name?.split(" ")[1],
+                    profilePic: payload?.picture,
+                    username: payload?.email,
+                    isGoogleUser: true,
+                });
+            } else if (!user.isGoogleUser) {
+                throw new Error("Email is already used with password");
+            }
+
+            const accessToken = jwt.sign({_id: user._id}, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+            const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET as string);
+
+            if (!user.refreshTokens) {
+                user.refreshTokens = [refreshToken];
+            } else {
+                user.refreshTokens.push(refreshToken);
+            }
+
+            await user.save();
+
+            console.log('Logged with Google!');
+
+            return response.status(200).send({
+                        'id': user._id,
+                        'username': user.username,
+                        'accessToken': accessToken,
+                        'refreshToken': refreshToken
+                    });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+}
+
+
 export default {
     register,
     login,
     logout,
-    refresh
+    refresh,
+    loginWithGoogle
 }
