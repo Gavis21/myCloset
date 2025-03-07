@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import UserSchema from "../models/user";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 
 
 const register = async (request: Request, response: Response) => {
