@@ -129,9 +129,56 @@ const logout = async (request: Request, response: Response) => {
     })
 }
 
+const refresh =  async (request: Request, response: Response) => {
+    console.log('Refreshing token...');
+    const header = request.headers['authorization'];
+    const refreshToken = header && header.split(' ')[1]; // remove the Bearer
+
+    if (refreshToken == null) { return response.sendStatus(401); }
+
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string, async (err, logoutUser) => {
+        console.log(`JWT verify - ${err}`);
+        if (err) return response.sendStatus(401);
+
+        try {
+            console.log(`Fetching user with id ${(logoutUser as { '_id': string })._id} from the DB`);
+            const user = await UserSchema.findOne({ '_id': (logoutUser as { '_id': string })._id });
+            if (!user){
+                console.error(`User ${(logoutUser as { '_id': string })._id} wasn't found`);
+                response.sendStatus(404).send(`User wasn't found`);
+            } else {
+                if(!user.refreshTokens || user.refreshTokens.length === 0){
+                    console.error(`No refresh token were found for ${(logoutUser as { '_id': string })._id}, reseting tokens...`);
+                    user.refreshTokens = [];
+                    await user.save();
+                    return response.sendStatus(401);
+                } else {
+                    console.log(`Refresh completed for ${(logoutUser as { '_id': string })._id}, adding new token...`);
+
+                    const accessToken = jwt.sign({ _id: user._id }, (process.env.JWT_SECRET as string), { expiresIn: process.env.JWT_EXPIRATION });
+                    const newRefreshToken = jwt.sign({ _id: user._id }, (process.env.JWT_REFRESH_SECRET as string));
+                    
+                    user.refreshTokens = user.refreshTokens.filter(t => t !== refreshToken);
+                    user.refreshTokens.push(newRefreshToken);
+
+                    await user.save();
+                    return response.status(200).send({
+                        'accessToken': accessToken,
+                        'refreshToken': refreshToken
+                    });
+                }
+            }
+        } catch (err) {
+            console.error(`Error logout for - ${(logoutUser as { '_id': string })._id}, \n ${err}`);
+            response.sendStatus(401).send(err);
+        }    
+    })
+}
+
 
 export default {
     register,
     login,
-    logout
+    logout,
+    refresh
 }
