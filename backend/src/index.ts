@@ -7,6 +7,9 @@ import mongoose from "mongoose";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import authRoute from "./routes/auth.route";
+import AuthRequest from './middlewares/auth';
+import OutfitsRoute from "./routes/outfits.route";
+
 
 dotenv.config();
 
@@ -51,8 +54,8 @@ const init = (): Promise<Express> => {
       
       // Routes
       app.use("/auth", authRoute);
+      app.use("/outfits", AuthRequest, OutfitsRoute);
       app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
-
 
       console.info(`Started listening on port ${port}`);
       resolve(app);

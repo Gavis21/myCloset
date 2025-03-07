@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import UserSchema from "../models/user";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import {sign, verify} from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 
 
@@ -69,9 +69,10 @@ const login = async (request: Request, response: Response) => {
         console.error(`Passwords for ${email} doesn't match - login failed`);
         return response.status(401).send("Wrong email or password");
     }
-
-    const accessToken = jwt.sign({_id: user._id}, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
-    const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET as string);
+    
+    //@ts-ignore
+    const accessToken = sign({_id: user._id}, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+    const refreshToken = sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET as string);
     if (!user.refreshTokens) {
         user.refreshTokens = [refreshToken];
     } else {
@@ -100,7 +101,7 @@ const logout = async (request: Request, response: Response) => {
 
     if (refreshToken == null) { return response.sendStatus(401); }
 
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string, async (err, logoutUser) => {
+    verify(refreshToken, process.env.JWT_REFRESH_SECRET as string, async (err, logoutUser) => {
         console.log(`JWT verify - ${err}`);
         if (err) return response.sendStatus(401);
 
@@ -137,7 +138,7 @@ const refresh =  async (request: Request, response: Response) => {
 
     if (refreshToken == null) { return response.sendStatus(401); }
 
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string, async (err, logoutUser) => {
+    verify(refreshToken, process.env.JWT_REFRESH_SECRET as string, async (err, logoutUser) => {
         console.log(`JWT verify - ${err}`);
         if (err) return response.sendStatus(401);
 
@@ -155,9 +156,10 @@ const refresh =  async (request: Request, response: Response) => {
                     return response.sendStatus(401);
                 } else {
                     console.log(`Refresh completed for ${(logoutUser as { '_id': string })._id}, adding new token...`);
-
-                    const accessToken = jwt.sign({ _id: user._id }, (process.env.JWT_SECRET as string), { expiresIn: process.env.JWT_EXPIRATION });
-                    const newRefreshToken = jwt.sign({ _id: user._id }, (process.env.JWT_REFRESH_SECRET as string));
+                    
+                    //@ts-ignore
+                    const accessToken = sign({ _id: user._id }, (process.env.JWT_SECRET as string), { expiresIn: process.env.JWT_EXPIRATION });
+                    const newRefreshToken = sign({ _id: user._id }, (process.env.JWT_REFRESH_SECRET as string));
                     
                     user.refreshTokens = user.refreshTokens.filter(t => t !== refreshToken);
                     user.refreshTokens.push(newRefreshToken);
@@ -206,9 +208,10 @@ const loginWithGoogle = () => {
             } else if (!user.isGoogleUser) {
                 throw new Error("Email is already used with password");
             }
-
-            const accessToken = jwt.sign({_id: user._id}, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
-            const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET as string);
+            
+            //@ts-ignore
+            const accessToken = sign({_id: user._id}, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRATION });
+            const refreshToken = sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET as string);
 
             if (!user.refreshTokens) {
                 user.refreshTokens = [refreshToken];
