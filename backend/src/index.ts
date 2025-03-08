@@ -8,7 +8,8 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import authRoute from "./routes/auth.route";
 import AuthRequest from './middlewares/auth';
-import OutfitsRoute from "./routes/outfits.route";
+import outfitsRoute from "./routes/outfits.route";
+import usersRoute from "./routes/users.route";
 
 
 dotenv.config();
@@ -54,7 +55,8 @@ const init = (): Promise<Express> => {
       
       // Routes
       app.use("/auth", authRoute);
-      app.use("/outfits", AuthRequest, OutfitsRoute);
+      app.use("/outfits", AuthRequest, outfitsRoute);
+      app.use("/users", AuthRequest, usersRoute)
       app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
 
       console.info(`Started listening on port ${port}`);
