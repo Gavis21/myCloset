@@ -11,6 +11,8 @@ import AuthRequest from './middlewares/auth';
 import outfitsRoute from "./routes/outfits.route";
 import usersRoute from "./routes/users.route";
 import PostsRoute from "./routes/posts.route";
+import FileRoute from "./routes/file.route";
+
 
 
 dotenv.config();
@@ -59,6 +61,7 @@ const init = (): Promise<Express> => {
       app.use("/outfits", AuthRequest, outfitsRoute);
       app.use("/users", AuthRequest, usersRoute);
       app.use("/posts", AuthRequest, PostsRoute);
+      app.use("/file", FileRoute);
       app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
 
       console.info(`Started listening on port ${port}`);
@@ -74,4 +77,4 @@ export default init;
 
 if(process.env.NODE_ENV !== 'PRODUCTION'){
   init().then((app)=> http.createServer(app).listen(process.env.PORT));
-} 
+} //TODO: else
