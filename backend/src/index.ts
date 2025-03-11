@@ -12,8 +12,7 @@ import outfitsRoute from "./routes/outfits.route";
 import usersRoute from "./routes/users.route";
 import PostsRoute from "./routes/posts.route";
 import FileRoute from "./routes/file.route";
-
-
+import path from "path";
 
 dotenv.config();
 
@@ -62,7 +61,21 @@ const init = (): Promise<Express> => {
       app.use("/users", AuthRequest, usersRoute);
       app.use("/posts", AuthRequest, PostsRoute);
       app.use("/file", FileRoute);
+      app.use("/public", express.static("public"));
       app.use("/swagger", swaggerUI.serve, swaggerUI.setup(specs));
+
+      app.use(
+        "/assets",
+        express.static(
+          path.resolve(__dirname, "..", "..", "..", "front/dist/assets")
+        )
+      );
+
+      app.get("/", (req, res) =>
+        res.sendFile(
+          path.resolve(__dirname, "..", "..",  "..", "front/dist", "index.html")
+        )
+      );
 
       console.info(`Started listening on port ${port}`);
       resolve(app);
