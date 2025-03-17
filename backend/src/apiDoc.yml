@@ -1,0 +1,206 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: [] 
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registers a new user
+      description: Creates a user
+      requestBody:
+        description: The new user data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+              required:
+                - email
+                - password
+                - username
+                - firstName
+                - lastName
+        required: true
+      responses:
+        "200":
+          description: User created and logged in
+        "400":
+          description: Missing field
+        "409":
+          description: "Used email/username"
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Logs an user
+      description: Checks the give user creds and logs the user in
+      requestBody:
+        description: Credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+        required: true
+      responses:
+        "200":
+          description: User logged in
+        "400":
+          description: Missing field
+        "401":
+          description: "Incorrect credentials"
+  /auth/google:
+    post:
+      tags:
+        - Auth
+      summary: Log in using google Auth
+      description: Logs/Register a user with google
+      requestBody:
+        description: Credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+              required:
+                - code
+        required: true
+      responses:
+        "200":
+          description: User is logged in
+        "400":
+          description: Email is already associated to a user
+  /auth/logout:
+    get:
+      tags:
+        - Auth
+      summary: Logs a user out
+      description: Removes all refreshtokens from the user
+      responses:
+        "200":
+          description: User is logged out
+        "401":
+          description: Invalid token
+  /auth/refresh:
+    get:
+      tags:
+        - Auth
+      summary: Refreshes the access token
+      description: Return a new token pair
+      responses:
+        "200":
+          description: New tokens
+        "401":
+          description: Invalid refresh token
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user data
+      description: Return user's data
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Requested user data
+        "404":
+          description: User not found
+        "401":
+          description: unauthorized
+    put:
+      tags:
+        - Users
+      summary: Update user
+      description: Edit fields in user
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: New data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  typr: string
+                password:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Requested user data
+        "400":
+          description: Error in updating user
+        "401":
+          description: unauthorized
+  /outfits/explore:
+    get:
+      tags:
+        - Outfits
+      summary: Get random outfits
+      description: return random outfits information
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Requested data
+        "401":
+          description: unauthorized
+/posts/{id}:
+    put:
+      tags:
+        - Posts
+      summary: Update post
+      description: Edit fields in post
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: New data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                outfitName:
+                  type: string
+                imageUrl:
+                  typr: string
+                description:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Requested post data
+        "400":
+          description: Error in updating post
+        "401":
+          description: unauthorized
