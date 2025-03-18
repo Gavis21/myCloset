@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Navigate, Routes, useLocation } from "react-router-dom";
+import { Navigate, Routes, Route, useLocation } from "react-router-dom";
 import AuthContext from "../auth/AuthContext.tsx";
 
 function useQuery() {
@@ -24,7 +24,17 @@ export default function PublicLayout() {
         }}
       >
         <Routes>
-          
+          <Route
+            path="/closetPage"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ClosetPage username={query.get("username")} />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </div>
     </>
