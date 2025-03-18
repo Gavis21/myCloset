@@ -8,12 +8,18 @@ import theme from "../../theme";
 import { useNavigate } from "react-router-dom";
 import { IPost } from "../../services/posts-service";
 import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import NewPostModal from "./NewPostModal";
 
 const OutfitCard = ({ post }: { post: IPost }) => {
   const navigate = useNavigate();
   const routeChange = (path: string) => navigate(path);
   const routeOutfitPage = (_id: string) =>
     routeChange(`/outfitPage?postId=${_id}`);
+
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const handleOpenEditModal = () => setOpenEditModal(true);
+  const handleCloseEditModal = () => setOpenEditModal(false);
 
   return (
     <Card
@@ -53,6 +59,7 @@ const OutfitCard = ({ post }: { post: IPost }) => {
                 aria-label="edit"
                 size="small"
                 color="primary"
+                onClick={handleOpenEditModal}
               >
                 <EditIcon />
               </IconButton>
@@ -78,6 +85,14 @@ const OutfitCard = ({ post }: { post: IPost }) => {
             {post.comments?.length} Comments
           </Typography>
         </CardContent>
+        {openEditModal && (
+          <NewPostModal
+            open={openEditModal}
+            handleClose={handleCloseEditModal}
+            isNew={false}
+            post={post}
+          />
+        )}
       </Box>
     </Card>
   );
