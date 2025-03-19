@@ -5,6 +5,7 @@ import OutfitPage from "../pages/outfit-page/OutfitPage.tsx";
 import SignIn from "../pages/sign-in/SignIn.tsx";
 import AuthContext from "../auth/AuthContext.tsx";
 import SignUp from "../pages/sign-up/SignUp.tsx";
+import ExplorePage from "../pages/explore-page/ExplorePage.tsx";
 
 function useQuery() {
   const { search } = useLocation();
@@ -47,6 +48,28 @@ export default function PublicLayout() {
                 isAuthenticated={Object.keys(user).length > 0}
               >
                 <OutfitPage postId={query.get("postId")} />
+              </RequireAuth>
+            }
+          />
+           <Route
+            path="/explorePage"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ExplorePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ExplorePage />
               </RequireAuth>
             }
           />
