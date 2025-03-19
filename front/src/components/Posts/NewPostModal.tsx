@@ -7,7 +7,8 @@ import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import baseTheme from "../../theme.ts";
 import theme from "../../theme.ts";
-import { useRef, useState, useEffect } from "react";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
+import { uploadPhoto } from "../../services/file-service.ts";
 import {
   createPost,
   IPost,
@@ -67,6 +68,15 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
     }));
   };
 
+  const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setIsImgOnServer(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        imageUrl: e.target.files![0],
+      }));
+    }
+  };
   const selectImg = () => {
     console.log("Selecting image...");
     fileInputRef.current?.click();
@@ -84,8 +94,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
   };
 
   const handleCreateSubmit = async (data: FormData) => {
-    // TODO
-    const url = "";
+    const url = await uploadPhoto(formData.imageUrl!);
     console.log("upload returned:" + url);
     const post: IPost = {
       username: localStorage.getItem("userName")!,
@@ -102,8 +111,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
   const handleEditSubmit = async (data: FormData) => {
     const url = isImgOnServer
       ? post.imageUrl
-      : //TODO
-        "";
+      : await uploadPhoto(formData.imageUrl!);
     const newPost: IPost = {
       ...post,
       username: localStorage.getItem("userName")!,
@@ -176,7 +184,8 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
                 style={{ display: "none" }}
                 ref={fileInputRef}
                 type="file"
-              />
+                onChange={imgSelected}
+              ></input>
               {!formData.imageUrl && (
                 <Button type="button" onClick={selectImg}>
                   select image
