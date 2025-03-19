@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
+import SignIn from "../pages/sign-in/SignIn.tsx";
 import AuthContext from "../auth/AuthContext.tsx";
 
 function useQuery() {
@@ -35,6 +36,7 @@ export default function PublicLayout() {
               </RequireAuth>
             }
           />
+          <Route path="signin" element={<SignIn />} />
         </Routes>
       </div>
     </>
