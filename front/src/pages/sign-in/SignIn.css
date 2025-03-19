@@ -1,0 +1,27 @@
+.MuiInputBase-input {
+  background: white;
+}
+.MuiTextField-root {
+  background: white;
+}
+
+.mainCard {
+  border-color: #394c76 !important;
+  border-width: 0.3vw !important;
+}
+
+.signincard {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.signinRedirectionLink {
+  color: blue !important;
+}
+
+.mainBtn {
+  color: white !important;
+}

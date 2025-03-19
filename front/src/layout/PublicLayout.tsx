@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
+import SignIn from "../pages/sign-in/SignIn.tsx";
 import AuthContext from "../auth/AuthContext.tsx";
+import SignUp from "../pages/sign-up/SignUp.tsx";
 
 function useQuery() {
   const { search } = useLocation();
@@ -35,6 +37,8 @@ export default function PublicLayout() {
               </RequireAuth>
             }
           />
+          <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
         </Routes>
       </div>
     </>

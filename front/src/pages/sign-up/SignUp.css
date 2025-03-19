@@ -1,0 +1,24 @@
+.signupcard {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.mainCard {
+  border-color: ##394c76 !important;
+  border-width: 0.3vw !important;
+}
+
+.signupBtn {
+  color: white !important;
+}
+
+.addPhotoBtn {
+  color: #394c76 !important;
+}
+
+.signupRedirectionLink{
+  color: blue !important;
+}
