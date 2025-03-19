@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { Navigate, Routes, Route, useLocation } from "react-router-dom";
+import ClosetPage from "../pages/closet-page/ClosetPage.tsx";
+import OutfitPage from "../pages/outfit-page/OutfitPage.tsx";
 import AuthContext from "../auth/AuthContext.tsx";
 
 function useQuery() {
@@ -32,6 +34,17 @@ export default function PublicLayout() {
                 isAuthenticated={Object.keys(user).length > 0}
               >
                 <ClosetPage username={query.get("username")} />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/outfitPage"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <OutfitPage postId={query.get("postId")} />
               </RequireAuth>
             }
           />
