@@ -14,6 +14,7 @@ import { register } from "../../services/user-service.ts";
 import { useNavigate } from "react-router-dom";
 import LoadingOverlay from "react-loading-overlay-ts";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { uploadPhoto } from "../../services/file-service.ts";
 
 const SignUpTheme = createTheme({
   ...baseTheme,
@@ -94,8 +95,7 @@ export default function SignUp() {
       data.get("lastname") &&
       imageUrl
     ) {
-      // TODO upload image
-      const url = "";
+      const url = await uploadPhoto(imageUrl!);
       const newUser: IUser = {
         email: data.get("email")?.toString(),
         password: data.get("password")?.toString(),
