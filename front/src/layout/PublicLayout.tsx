@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
-import { Navigate, Routes, Route, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import AuthContext from "../auth/AuthContext.tsx";
 import ClosetPage from "../pages/closet-page/ClosetPage.tsx";
+import EditProfile from "../pages/edit-profile-page/EditProfile.tsx";
+import ExplorePage from "../pages/explore-page/ExplorePage";
 import OutfitPage from "../pages/outfit-page/OutfitPage.tsx";
 import SignIn from "../pages/sign-in/SignIn.tsx";
-import AuthContext from "../auth/AuthContext.tsx";
 import SignUp from "../pages/sign-up/SignUp.tsx";
-import ExplorePage from "../pages/explore-page/ExplorePage.tsx";
-import EditProfile from "../pages/edit-profile-page/EditProfile.tsx";
+import SearchAppBar from "./Appbar/Appbar";
 
 function useQuery() {
   const { search } = useLocation();
@@ -23,6 +24,8 @@ export default function PublicLayout() {
   //TODO: GUY
   return (
     <>
+      {Object.keys(user).length > 0 && <SearchAppBar />}
+
       {/* <SearchAppBar /> */}
       <div
         style={{
@@ -52,7 +55,7 @@ export default function PublicLayout() {
               </RequireAuth>
             }
           />
-           <Route
+          <Route
             path="/explorePage"
             element={
               <RequireAuth
@@ -64,16 +67,6 @@ export default function PublicLayout() {
             }
           />
           <Route
-            path="/"
-            element={
-              <RequireAuth
-                redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
-              >
-                <ExplorePage />
-                </RequireAuth>
-              />
-          <Route
             path="/editProfile"
             element={
               <RequireAuth
@@ -81,6 +74,18 @@ export default function PublicLayout() {
                 isAuthenticated={Object.keys(user).length > 0}
               >
                 <EditProfile />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="/"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ExplorePage />
               </RequireAuth>
             }
           />
