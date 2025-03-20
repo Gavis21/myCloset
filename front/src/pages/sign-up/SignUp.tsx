@@ -1,20 +1,19 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import baseTheme from "../../theme.ts";
-import { Avatar, Card } from "@mui/material";
-import { ChangeEvent, useState, useRef } from "react";
-import "./SignUp.css";
-import Box from "@mui/material/Box";
-import { IUser } from "../../services/user-service.ts";
-import { register } from "../../services/user-service.ts";
-import { useNavigate } from "react-router-dom";
-import LoadingOverlay from "react-loading-overlay-ts";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { Avatar, Card } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { ChangeEvent, useRef, useState } from "react";
+import LoadingOverlay from "react-loading-overlay-ts";
+import { useNavigate } from "react-router-dom";
 import { uploadPhoto } from "../../services/file-service.ts";
+import { IUser, register } from "../../services/user-service.ts";
+import baseTheme from "../../theme.ts";
+import "./SignUp.css";
 
 const SignUpTheme = createTheme({
   ...baseTheme,
@@ -27,6 +26,7 @@ export default function SignUp() {
   let navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isImgOnServer, setIsImgOnServer] = useState<boolean>(false);
 
   const [startedRegister, setStartedRegister] = useState(false);
   const [firstNameInput, setFirstNameInput] = useState("");
@@ -80,6 +80,7 @@ export default function SignUp() {
   const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     if (e.target.files && e.target.files.length > 0) {
+      setIsImgOnServer(false);
       setImageUrl(e.target.files![0]);
     }
   };
