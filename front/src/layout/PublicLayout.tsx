@@ -5,6 +5,7 @@ import OutfitPage from "../pages/outfit-page/OutfitPage.tsx";
 import SignIn from "../pages/sign-in/SignIn.tsx";
 import AuthContext from "../auth/AuthContext.tsx";
 import SignUp from "../pages/sign-up/SignUp.tsx";
+import ExplorePage from "../pages/explore-page/ExplorePage.tsx";
 import EditProfile from "../pages/edit-profile-page/EditProfile.tsx";
 
 function useQuery() {
@@ -51,6 +52,27 @@ export default function PublicLayout() {
               </RequireAuth>
             }
           />
+           <Route
+            path="/explorePage"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ExplorePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <RequireAuth
+                redirectTo="/signIn"
+                isAuthenticated={Object.keys(user).length > 0}
+              >
+                <ExplorePage />
+                </RequireAuth>
+              />
           <Route
             path="/editProfile"
             element={
