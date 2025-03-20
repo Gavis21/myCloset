@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { uploadPhoto } from "../../services/file-service.ts";
 import { getUserById, IUser, updateById } from "../../services/user-service.ts";
 import baseTheme from "../../theme.ts";
-import "./EditProdile.css";
+import "./EditProfile.css";
 
 const SignUpTheme = createTheme({
   ...baseTheme,

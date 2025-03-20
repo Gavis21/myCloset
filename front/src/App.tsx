@@ -1,10 +1,11 @@
 import "./App.css";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import baseTheme from "./theme.ts";
+import PublicLayout from "./layout/PublicLayout.tsx";
 import AuthContext from "./auth/AuthContext.tsx";
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import PublicLayout from "./layout/PublicLayout.tsx";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -18,17 +19,19 @@ export default function App() {
 
   return (
     <>
-      <GoogleOAuthProvider clientId="179334466716-uvk404sbcsdvf7ptcjf3n1rqfi4sha95.apps.googleusercontent.com">
-        <AuthContext.Provider
-          value={{ user: currentUser, setUser: setCurrentUser }}
-        >
-          <PublicLayout/>
-        </AuthContext.Provider>
+      <ThemeProvider theme={baseTheme}>
+        <GoogleOAuthProvider clientId="179334466716-uvk404sbcsdvf7ptcjf3n1rqfi4sha95.apps.googleusercontent.com">
+          <AuthContext.Provider
+            value={{ user: currentUser, setUser: setCurrentUser }}
+          >
+            <PublicLayout />
+          </AuthContext.Provider>
 
-        <CssBaseline />
+          <CssBaseline />
 
-        <Outlet />
-      </GoogleOAuthProvider>
+          <Outlet />
+        </GoogleOAuthProvider>
+      </ThemeProvider>
     </>
   );
 }
