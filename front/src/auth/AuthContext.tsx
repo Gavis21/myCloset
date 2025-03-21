@@ -6,7 +6,7 @@ interface IAuthContext {
     setUser: (user: IUser | null) => void;
 }
 
-const AuthContext = createContext<IAuthContext | undefined>({
+const AuthContext = createContext<IAuthContext>({
     user: {},
     setUser: () => {},
 });
