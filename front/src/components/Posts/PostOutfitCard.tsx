@@ -17,6 +17,7 @@ const OutfitCard = ({ post }: { post: IPost }) => {
     routeChange(`/outfitPage?postId=${_id}`);
 
   const [openEditModal, setOpenEditModal] = useState(false);
+
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
 
@@ -78,7 +79,9 @@ const OutfitCard = ({ post }: { post: IPost }) => {
             component="div"
             align="left"
             onClick={() => {
-              routeOutfitPage(post._id);
+              if (post._id) {
+                routeOutfitPage(post._id);
+              }
             }}
           >
             {post.comments?.length} Comments
