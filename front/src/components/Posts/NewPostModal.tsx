@@ -47,7 +47,7 @@ interface iProps {
   open: boolean;
   handleClose: () => void;
   isNew: boolean;
-  post: IPost;
+  post?: IPost;
 }
 
 const NewPostModal = ({ open, handleClose, isNew, post }: iProps) => {
@@ -77,7 +77,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: iProps) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -126,7 +126,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: iProps) => {
 
   const handleEditSubmit = async (data: FormData) => {
     const url = isImgOnServer
-      ? post.imageUrl
+      ? post?.imageUrl
       : await uploadPhoto(formData.imageUrl! as File);
 
     const newPost: IPost = {
@@ -142,7 +142,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: iProps) => {
   };
 
   const deletePost = async () => {
-    if (post._id) {
+    if (post?._id) {
       await deletePostById(post._id);
     }
     navigate(0);
