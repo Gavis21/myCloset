@@ -10,7 +10,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import LoadingOverlay from "react-loading-overlay-ts";
-import { useNavigate } from "react-router-dom";
 import { uploadPhoto } from "../../services/file-service.ts";
 import { getUserById, IUser, updateById } from "../../services/user-service.ts";
 import baseTheme from "../../theme.ts";
@@ -23,24 +22,25 @@ const SignUpTheme = createTheme({
 const getInitials = (first: string, last: string) =>
   `${first.charAt(0).toUpperCase()}${last.charAt(0).toUpperCase()}`;
 
-async function getUser(): Promise<IUser> {
-  const response = await getUserById(localStorage.getItem("userId"));
-  return response;
+async function getUser(): Promise<IUser | undefined> {
+  const userId = localStorage.getItem("userId")
+  if (userId) {
+    const response = await getUserById(userId);
+    return response;
+  }
 }
 
-export default function EditProdile() {
-  let navigate = useNavigate();
-
+export default function EditProfile() {
   useEffect(() => {
-    getUser().then((user: IUser) => {
-      setUserId(user._id ?? "");
-      setFirstNameInput(user.firstName ?? "");
-      setLastNameInput(user.lastName ?? "");
-      setUsernameInput(user.username ?? "");
-      setEmailInput(user.email ?? "");
+    getUser().then((user?: IUser) => {
+      setUserId(user?._id ?? "");
+      setFirstNameInput(user?.firstName ?? "");
+      setLastNameInput(user?.lastName ?? "");
+      setUsernameInput(user?.username ?? "");
+      setEmailInput(user?.email ?? "");
       setPasswordInput("");
-      setIsGoogle(user.isGoogleUser ?? false);
-      setUserImage(user.imageUrl ?? "");
+      setIsGoogle(user?.isGoogleUser ?? false);
+      setUserImage(user?.imageUrl ?? "");
     });
   }, []);
 
@@ -132,7 +132,7 @@ export default function EditProdile() {
         };
         updateById(userId, changedUser)
           .then(() => {
-            imageUrl && setUserImage(changedUser.imageUrl);
+            changedUser.imageUrl && setUserImage(changedUser.imageUrl);
             setEditMode(false);
           })
           .finally(() => {

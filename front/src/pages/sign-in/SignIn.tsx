@@ -26,7 +26,7 @@ const SignInTheme = createTheme({
 
 export default function SignIn() {
   let navigate = useNavigate();
-  const { setUser } = useContext<any>(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
