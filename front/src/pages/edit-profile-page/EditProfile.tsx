@@ -47,7 +47,6 @@ export default function EditProdile() {
   const [editMode, setEditMode] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isImgOnServer, setIsImgOnServer] = useState<boolean>(false);
 
   const [userId, setUserId] = useState("");
   const [startedRegister, setStartedRegister] = useState(false);
@@ -69,7 +68,6 @@ export default function EditProdile() {
   const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     if (e.target.files && e.target.files.length > 0) {
-      setIsImgOnServer(false);
       setImageUrl(e.target.files![0]);
     }
   };
