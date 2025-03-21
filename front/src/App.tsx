@@ -14,13 +14,12 @@ export default function App() {
 
   useEffect(() => {
     console.log("Updated default token");
-    // apiClient.defaults.headers.common = {'authorization': `bearer ${localStorage.getItem('accessToken')}`};
   }, [currentUser]);
 
   return (
     <>
       <ThemeProvider theme={baseTheme}>
-        <GoogleOAuthProvider clientId="179334466716-uvk404sbcsdvf7ptcjf3n1rqfi4sha95.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_OAUTH_KEY}>
           <AuthContext.Provider
             value={{ user: currentUser, setUser: setCurrentUser }}
           >

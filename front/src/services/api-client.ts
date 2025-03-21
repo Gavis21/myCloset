@@ -2,12 +2,11 @@ import axios from "axios";
 import { refreshInterceptor } from "./refreshInterceptors";
 
 const apiClient = axios.create({
-    baseURL: 'http://127.0.0.1:3000'
-    // baseURL: 'https://193.106.55.182',
+    baseURL: import.meta.env.VITE_SERVER_URL
 });
 
 export const refreshToken = async (): Promise<void> => {
-    const newUser = (await axios.get('http://127.0.0.1:3000/auth/refresh', { 
+    const newUser = (await axios.get(`${import.meta.env.VITE_SERVER_URL}/auth/refresh`, { 
         headers: {'authorization': `Bearer ${localStorage.getItem('refreshToken') }`}
     })).data;
     
