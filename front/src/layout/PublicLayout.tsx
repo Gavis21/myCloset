@@ -29,7 +29,7 @@ export default function PublicLayout() {
 
   return (
     <>
-      {Object.keys(user).length > 0 && <SearchAppBar />}
+      {user && <SearchAppBar />}
 
       <div
         style={{
@@ -42,7 +42,7 @@ export default function PublicLayout() {
             element={
               <RequireAuth
                 redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
+                isAuthenticated={!!user}
               >
                 <ClosetPage username={query.get("username")} />
               </RequireAuth>
@@ -53,7 +53,7 @@ export default function PublicLayout() {
             element={
               <RequireAuth
                 redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
+                isAuthenticated={!!user}
               >
                 <OutfitPage postId={query.get("postId")} />
               </RequireAuth>
@@ -64,7 +64,7 @@ export default function PublicLayout() {
             element={
               <RequireAuth
                 redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
+                isAuthenticated={!!user}
               >
                 <ExplorePage />
               </RequireAuth>
@@ -75,7 +75,7 @@ export default function PublicLayout() {
             element={
               <RequireAuth
                 redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
+                isAuthenticated={!!user}
               >
                 <EditProfile />
               </RequireAuth>
@@ -87,7 +87,7 @@ export default function PublicLayout() {
             element={
               <RequireAuth
                 redirectTo="/signIn"
-                isAuthenticated={Object.keys(user).length > 0}
+                isAuthenticated={!!user}
               >
                 <ExplorePage />
               </RequireAuth>

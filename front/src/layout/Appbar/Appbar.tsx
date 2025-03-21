@@ -39,7 +39,8 @@ export default function SearchAppBar() {
     localStorage.removeItem("userName");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    setUser({});
+
+    setUser(null);
     routeSignin();
   };
 

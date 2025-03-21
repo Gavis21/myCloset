@@ -9,7 +9,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState(
-    localStorage.getItem("accessToken") || {}
+    localStorage.getItem("accessToken")
   );
 
   useEffect(() => {
