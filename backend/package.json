@@ -8,7 +8,7 @@
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "prod": "tsc -p ./tsconfig_prod.json && cp -r ./cert ./dist/cert && node ./dist/src/index.js"
+    "prod": "tsc -p ./tsconfig_prod.json && cp -r ./cert ./dist/cert && pm2 restart ecosystem.config.js --env production"
   },
   "keywords": [],
   "author": "",
