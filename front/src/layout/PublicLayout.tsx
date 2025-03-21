@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import React, { PropsWithChildren, useContext } from "react";
+import { Navigate, Route, Routes, To, useLocation } from "react-router-dom";
 import AuthContext from "../auth/AuthContext.tsx";
 import ClosetPage from "../pages/closet-page/ClosetPage.tsx";
 import EditProfile from "../pages/edit-profile-page/EditProfile.tsx";
@@ -13,20 +13,24 @@ function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
-function RequireAuth({ isAuthenticated, children, redirectTo }) {
+
+interface iRequireAuthProps extends PropsWithChildren {
+  isAuthenticated?: boolean
+  redirectTo: To
+}
+
+const RequireAuth: React.FC<iRequireAuthProps> = ({ isAuthenticated, children, redirectTo }) => {
   return isAuthenticated ? children : <Navigate to={redirectTo} />;
 }
 
 export default function PublicLayout() {
   let query = useQuery();
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
-  //TODO: GUY
   return (
     <>
       {Object.keys(user).length > 0 && <SearchAppBar />}
 
-      {/* <SearchAppBar /> */}
       <div
         style={{
           marginTop: "64px" /* Adjust the value based on your navbar height */,
