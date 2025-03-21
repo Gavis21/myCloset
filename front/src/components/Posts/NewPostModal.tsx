@@ -60,7 +60,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
