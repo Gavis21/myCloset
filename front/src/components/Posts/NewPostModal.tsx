@@ -17,6 +17,11 @@ import {
 } from "../../services/posts-service.ts";
 import { useNavigate } from "react-router-dom";
 
+const imgPreviewUrl = (url: string | File, imgOnServer: boolean) =>
+  imgOnServer
+    ? url as string
+    : URL.createObjectURL(new Blob([url], { type: "plain/text" }));
+
 const ClosetPageTheme = createTheme({
   ...baseTheme,
 });
@@ -32,17 +37,25 @@ const style = {
   p: 4,
 };
 
-const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
+interface iFormData {
+  outfitName?: string;
+  description?: string;
+  imageUrl?: File | string;
+}
+
+interface iProps {
+  open: boolean;
+  handleClose: () => void;
+  isNew: boolean;
+  post: IPost;
+}
+
+const NewPostModal = ({ open, handleClose, isNew, post }: iProps) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<iFormData>({
     outfitName: "",
     description: "",
-    imageUrl: null,
   });
-  const imgPreviewUrl = (url: string, imgOnServer: boolean) =>
-    imgOnServer
-      ? url
-      : URL.createObjectURL(new Blob([url], { type: "plain/text" }));
 
   useEffect(() => {
     setIsImgOnServer(false);
@@ -60,8 +73,11 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
+    
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -94,7 +110,7 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
   };
 
   const handleCreateSubmit = async (data: FormData) => {
-    const url = await uploadPhoto(formData.imageUrl!);
+    const url = await uploadPhoto(formData.imageUrl! as File);
     console.log("upload returned:" + url);
     const post: IPost = {
       username: localStorage.getItem("userName")!,
@@ -111,7 +127,8 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
   const handleEditSubmit = async (data: FormData) => {
     const url = isImgOnServer
       ? post.imageUrl
-      : await uploadPhoto(formData.imageUrl!);
+      : await uploadPhoto(formData.imageUrl! as File);
+
     const newPost: IPost = {
       ...post,
       username: localStorage.getItem("userName")!,
@@ -125,7 +142,9 @@ const NewPostModal = ({ open, handleClose, isNew, post }: any) => {
   };
 
   const deletePost = async () => {
-    await deletePostById(post._id);
+    if (post._id) {
+      await deletePostById(post._id);
+    }
     navigate(0);
   };
   return (
