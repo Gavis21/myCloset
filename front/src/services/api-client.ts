@@ -1,5 +1,4 @@
 import axios from "axios";
-import { IUser } from "./user-service";
 import { refreshInterceptor } from "./refreshInterceptors";
 
 const apiClient = axios.create({
