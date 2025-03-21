@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import baseTheme from "../../theme.ts";
-import OutfitCard from '../../components/Posts/PostOutfitCard.tsx';
-import NewPostModal from '../../components/Posts/NewPostModal';
+import OutfitCard from "../../components/Posts/PostOutfitCard.tsx";
+import NewPostModal from "../../components/Posts/NewPostModal";
 import { useState, useEffect } from "react";
 import { Button, Grid, Typography } from "@mui/material";
 import { fetchPostsByUser, IPost } from "../../services/posts-service";
@@ -16,8 +16,12 @@ async function getPostByUser(username: String): Promise<IPost[]> {
   return response;
 }
 
-export default function ClosetPage({ username }) {
-  const [posts, setPosts] = useState([]);
+interface iProps {
+  username: string | null;
+}
+
+const ClosetPage: React.FC<iProps> = ({ username }) => {
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [openAddModal, setOpenAddModal] = useState(false);
 
   const handleOpenAddModal = () => setOpenAddModal(true);
@@ -25,9 +29,11 @@ export default function ClosetPage({ username }) {
   const handleCloseAddModal = () => setOpenAddModal(false);
 
   useEffect(() => {
-    getPostByUser(username).then((posts: IPost[]) => {
-      setPosts(posts);
-    });
+    if (username) {
+      getPostByUser(username).then((posts: IPost[]) => {
+        setPosts(posts);
+      });
+    }
   }, [username]);
 
   return (
@@ -73,4 +79,6 @@ export default function ClosetPage({ username }) {
       )}
     </ThemeProvider>
   );
-}
+};
+
+export default ClosetPage
