@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse, HttpStatusCode, isAxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig, HttpStatusCode, isAxiosError } from "axios";
 import apiClient, { refreshToken } from './api-client';
 import { redirect } from "react-router-dom";
 

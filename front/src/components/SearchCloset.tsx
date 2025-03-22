@@ -26,9 +26,9 @@ const SearchCloset = () => {
   const routeUserCloset = (username: string) =>
     routeChange(`/closetPage?username=${username}`);
 
-  const handleOptionSelected = (_event, value) => {
+  const handleOptionSelected = (_event: React.SyntheticEvent<Element, Event>, value: String | null) => {
     if (value) {
-      routeUserCloset(value);
+      routeUserCloset(value.toString());
     }
   };
 

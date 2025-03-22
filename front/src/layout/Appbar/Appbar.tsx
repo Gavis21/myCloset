@@ -20,7 +20,7 @@ const theme = createTheme({
 });
 
 export default function SearchAppBar() {
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -39,7 +39,8 @@ export default function SearchAppBar() {
     localStorage.removeItem("userName");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    setUser({});
+
+    setUser(null);
     routeSignin();
   };
 

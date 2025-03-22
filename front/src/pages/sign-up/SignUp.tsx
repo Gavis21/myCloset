@@ -26,7 +26,6 @@ export default function SignUp() {
   let navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isImgOnServer, setIsImgOnServer] = useState<boolean>(false);
 
   const [startedRegister, setStartedRegister] = useState(false);
   const [firstNameInput, setFirstNameInput] = useState("");
@@ -80,7 +79,6 @@ export default function SignUp() {
   const imgSelected = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     if (e.target.files && e.target.files.length > 0) {
-      setIsImgOnServer(false);
       setImageUrl(e.target.files![0]);
     }
   };
